@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<module>
+    <id>Helcim.PaymentGateway</id>
+    <version>1.0.0</version>
+    <platformVersion>2.13.19</platformVersion>
+    <dependencies>
+        <dependency id="VirtoCommerce.Core" version="2.24.19" />
+    </dependencies>
+
+    <title>Helcim Payment Gateway</title>
+    <description>APIs and UI for Helcim payment gateway</description>
+    <authors>
+        <author>Virto Commerce</author>
+        <author>Konstantin Savosteev</author>
+    </authors>
+    <releaseNotes>First version.</releaseNotes>
+    <iconUrl>https://raw.githubusercontent.com/VirtoCommerce/vc-module-helcim/master/Helcim.PaymentGateway.Web/Content/logo.svg</iconUrl>
+    
+    <assemblyFile>Helcim.PaymentGateway.Web.dll</assemblyFile>
+    <moduleType>Helcim.PaymentGateway.Web.Module, Helcim.PaymentGateway.Web</moduleType>
+  
+    <settings>
+        <group name="Payment methods|Helcim|ApiKeys">
+        </group>
+        <group name="Payment methods|Helcim|General">
+            <setting>
+                <name>Helcim.PaymentGateway.Mode</name>
+                <valueType>string</valueType>
+                <defaultValue>test</defaultValue>
+                <allowedValues>
+                    <value>test</value>
+                    <value>live</value>
+                </allowedValues>
+                <title>Working mode</title>
+                <description>Helcim gateway mode</description>
+            </setting>
+        </group>
+    </settings>
+</module>
