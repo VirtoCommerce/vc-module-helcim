@@ -105,6 +105,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Content\paymentForm.liquid" />
     <None Include="module.ignore" />
     <None Include="packages.config" />
     <None Include="app.config" />
@@ -127,6 +128,8 @@
     <Compile Include="Managers\HelcimCheckoutPaymentMethod.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\HelcimCheckoutService.cs" />
+    <Compile Include="Services\HelcimService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Helcim.PaymentGateway.Core\Helcim.PaymentGateway.Core.csproj">

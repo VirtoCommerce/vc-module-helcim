@@ -55,14 +55,22 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Helpers\StringHelper.cs" />
+    <Compile Include="Model\HelcimRequest.cs" />
+    <Compile Include="Model\HelcimCheckoutSettings.cs" />
+    <Compile Include="Model\HelcimPaymentResponse.cs" />
+    <Compile Include="Model\HelcimTransaction.cs" />
+    <Compile Include="Model\HelcimTransactionResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IHelcimCheckoutService.cs" />
+    <Compile Include="Services\IHelcimService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="Services\" />
+    <Folder Include="Model\Payment\" />
+    <Folder Include="Model\Transaction\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

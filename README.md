@@ -8,6 +8,7 @@ Installing the module:
 
 # Settings
 * **Working mode** - Test or live working mode.
+* **Form Action** - helcim.js will POST this action upon processing a payment
 
 # License
 Copyright (c) Virtosoftware Ltd.  All rights reserved.

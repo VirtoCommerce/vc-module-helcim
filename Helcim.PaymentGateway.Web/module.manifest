@@ -21,6 +21,30 @@
   
     <settings>
         <group name="Payment methods|Helcim|ApiKeys">
+            <setting>
+                <name>Helcim.PaymentGateway.Token</name>
+                <valueType>string</valueType>
+                <title>Helcim.js Token</title>
+                <description>Token</description>
+            </setting>
+            <setting>
+                <name>Helcim.PaymentGateway.SecretKey</name>
+                <valueType>string</valueType>
+                <title>Helcim.js Secret Key</title>
+                <description>Secret Key</description>
+            </setting>
+            <setting>
+                <name>Helcim.PaymentGateway.AccountId</name>
+                <valueType>string</valueType>
+                <title>Account ID</title>
+                <description>Account ID</description>
+            </setting>
+            <setting>
+                <name>Helcim.PaymentGateway.ApiToken</name>
+                <valueType>string</valueType>
+                <title>API Access Token</title>
+                <description>Token</description>
+            </setting>
         </group>
         <group name="Payment methods|Helcim|General">
             <setting>
@@ -33,6 +57,20 @@
                 </allowedValues>
                 <title>Working mode</title>
                 <description>Helcim gateway mode</description>
+            </setting>
+            <setting>
+                <name>Helcim.PaymentGateway.ApiEndpoint</name>
+                <valueType>string</valueType>
+                <default>https://secure.myhelcim.com/api/</default>
+                <title>Helcim Commerce API Endpoint</title>
+                <description>Helcim Commerce API Endpoint</description>
+            </setting>
+            <setting>
+                <name>Helcim.PaymentGateway.FormAction</name>
+                <valueType>string</valueType>
+                <defaultValue>cart/externalpaymentcallback</defaultValue>
+                <title>Process Payment action</title>
+                <description>Form action which helcim.js calls</description>
             </setting>
         </group>
     </settings>

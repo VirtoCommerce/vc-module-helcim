@@ -1,0 +1,61 @@
+﻿<div id="helcimFormContainer">
+
+    <script src="https://secure.myhelcim.com/js/version2.js"></script>
+
+    <!--cart/externalpaymentcallback-->
+    <form name="helcimForm" id="helcimForm" action="{{formAction}}?orderId={{orderId}}&code={{paymentMethodCode}}" method="POST">
+
+        <!--RESULTS-->
+        <div id="helcimResults"></div>
+
+        <!--SETTINGS-->
+        <input type="hidden" id="token" value="{{token}}"/>
+        <input type="hidden" id="language" value="en"/>
+        <input type="hidden" id="test" value="{{isTest}}"/>
+
+        <!--CARD-INFORMATION-->
+        <div>
+            Card Number: <input type="text" id="cardNumber" value=""/>
+        </div>
+
+        <div>
+            Expiry Month: <input type="text" id="cardExpiryMonth" value=""/>
+        </div>
+        <div>
+
+            Expiry Year: <input type="text" id="cardExpiryYear" value=""/>
+        </div>
+        <div>
+            CVV: <input type="text" id="cardCVV" value=""/>
+        </div>
+
+        <!--OPTIONAL-AVS-->
+        <div>
+            Card Holder Name: <input type="text" id="cardHolderName" value=""/>
+        </div>
+
+        <input type="hidden" id="amount" value="{{amount}}"/>
+        <input type="hidden" id="amountHash" value="{{amountHash}}"/>
+        <input type="hidden" id="orderNumber" value="{{orderNumber}}"/>
+        <input type="hidden" id="paymentMethodCode" value="{{paymentMethodCode}}"/>
+        <input type="hidden" id="orderId" value="{{orderId}}"/>
+
+        <!--BUTTON-->
+        <div>
+            <input type="button" id="buttonProcess" value="Process" onclick="javascript:helcimProcess();"/>
+        </div>
+
+    </form>
+
+    <script type="text/javascript">
+        $("#helcimForm").ready(function() {
+            $("#helcimForm").submit(function(e){
+                e.preventDefault(); //prevent submit
+                var self = this;
+                //cut "xml" hidden field because it fails form validation
+                self.submit(); //submit if ajax OK
+            });
+        });
+    </script>
+
+</div>
