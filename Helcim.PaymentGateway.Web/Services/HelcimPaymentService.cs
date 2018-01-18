@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 using Helcim.PaymentGateway.Core.Model;
 using Helcim.PaymentGateway.Core.Model.Payment;
 using Helcim.PaymentGateway.Core.Services;
@@ -99,20 +97,6 @@ namespace Helcim.PaymentGateway.Web.Services
             var readTask = Task.Run(async () => await responseMessage.Content.ReadAsStringAsync());
             var resultContent = readTask.Result;
             return resultContent;
-        }
-
-        public static T DeserializeXml<T>(string xml, string rootName) where T : class, new()
-        {
-            if (xml == null)
-            {
-                throw new ArgumentNullException(nameof(xml));
-            }
-
-            var serializer = new XmlSerializer(typeof(T), new XmlRootAttribute { ElementName = rootName });
-            using (var reader = new StringReader(xml))
-            {
-                return (T)serializer.Deserialize(reader);
-            }
         }
 
         #endregion

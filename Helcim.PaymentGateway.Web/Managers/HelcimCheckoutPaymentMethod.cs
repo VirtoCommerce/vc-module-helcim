@@ -100,7 +100,6 @@ namespace Helcim.PaymentGateway.Web.Managers
             return result;
         }
 
-
         public override PostProcessPaymentResult PostProcessPayment(PostProcessPaymentEvaluationContext context)
         {
             var result = new PostProcessPaymentResult();
