@@ -25,7 +25,7 @@
                 <name>Helcim.PaymentGateway.Token</name>
                 <valueType>string</valueType>
                 <title>Helcim.js Token</title>
-                <description>Token</description>
+                <description>Frontend Access Token</description>
             </setting>
             <setting>
                 <name>Helcim.PaymentGateway.SecretKey</name>
@@ -36,14 +36,14 @@
             <setting>
                 <name>Helcim.PaymentGateway.AccountId</name>
                 <valueType>string</valueType>
-                <title>Account ID</title>
+                <title>Helcim Account ID</title>
                 <description>Account ID</description>
             </setting>
             <setting>
                 <name>Helcim.PaymentGateway.ApiToken</name>
                 <valueType>string</valueType>
-                <title>API Access Token</title>
-                <description>Token</description>
+                <title>Helcim API Access Token</title>
+                <description>Backend Access Token</description>
             </setting>
         </group>
         <group name="Payment methods|Helcim|General">
@@ -61,9 +61,16 @@
             <setting>
                 <name>Helcim.PaymentGateway.ApiEndpoint</name>
                 <valueType>string</valueType>
-                <default>https://secure.myhelcim.com/api/</default>
-                <title>Helcim Commerce API Endpoint</title>
+                <defaultValue>https://secure.myhelcim.com/api/</defaultValue>
+                <title>Path to Helcim Commerce API</title>
                 <description>Helcim Commerce API Endpoint</description>
+            </setting>
+            <setting>
+                <name>Helcim.PaymentGateway.HelcimjsPath</name>
+                <valueType>string</valueType>
+                <defaultValue>https://secure.myhelcim.com/js/version2.js</defaultValue>
+                <title>Path to Helcim.js</title>
+                <description>Helcim.js path</description>
             </setting>
             <setting>
                 <name>Helcim.PaymentGateway.FormAction</name>
@@ -71,6 +78,17 @@
                 <defaultValue>cart/externalpaymentcallback</defaultValue>
                 <title>Process Payment action</title>
                 <description>Form action which helcim.js calls</description>
+            </setting>
+            <setting>
+                <name>Helcim.PaymentGateway.PaymentType</name>
+                <valueType>string</valueType>
+                <defaultValue>Sale</defaultValue>
+                <allowedValues>
+                    <value>Sale</value>
+                    <value>Authorize/Capture</value>
+                </allowedValues>
+                <title>Payment type</title>
+                <description>Sale or Authorize/Capture</description>
             </setting>
         </group>
     </settings>

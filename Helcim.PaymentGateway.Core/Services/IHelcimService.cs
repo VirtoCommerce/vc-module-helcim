@@ -1,12 +1,14 @@
-﻿using System.Threading.Tasks;
-using Helcim.PaymentGateway.Core.Model;
+﻿using Helcim.PaymentGateway.Core.Model;
+using Helcim.PaymentGateway.Core.Model.Payment;
 
 namespace Helcim.PaymentGateway.Core.Services
 {
     public interface IHelcimService
     {
-        Task<HelcimTransactionResponse> GetTransaction(HelcimRequest request);
+        HelcimPaymentResponse GetTransaction(HelcimTransactionRequest request);
 
-        Task<HelcimPaymentResponse> CapturePayment(HelcimRequest request);
+        HelcimPaymentResponse CapturePayment(HelcimTransactionRequest request);
+
+        HelcimPaymentResponse CheckTransaction(HelcimCheckTransactionRequest request);
     }
 }

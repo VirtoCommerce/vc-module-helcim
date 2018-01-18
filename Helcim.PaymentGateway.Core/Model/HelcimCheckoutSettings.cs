@@ -19,5 +19,7 @@ namespace Helcim.PaymentGateway.Core.Model
         public string Language { get; set; }
 
         public string PaymentMethodCode { get; set; }
+
+        public string HelcimJsPath { get; set; }
     }
 }

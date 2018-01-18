@@ -19,5 +19,9 @@ namespace Helcim.PaymentGateway.Core.Helpers
             return stringBuilder.ToString();
         }
 
+        public static string ToCurrencyString(this decimal source)
+        {
+            return source.ToString("N2");
+        }
     }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<message>
+    <response>0</response>
+    <responseMessage>Invalid Transaction ID</responseMessage>
+    <version>COMMERCE 1.39.8</version>
+    <database>DB2</database>
+    <server></server>
+</message>

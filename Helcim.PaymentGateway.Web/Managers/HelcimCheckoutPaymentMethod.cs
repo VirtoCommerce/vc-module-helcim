@@ -11,86 +11,50 @@ namespace Helcim.PaymentGateway.Web.Managers
     {
         private const string _paymentMethodModeStoreSetting = "Helcim.PaymentGateway.Mode";
         private const string _formActionUrlSetting = "Helcim.PaymentGateway.FormAction";
+        private const string _paymentActionType = "Helcim.PaymentGateway.PaymentType";
+
         private const string _tokenSetting = "Helcim.PaymentGateway.Token";
         private const string _secretKeySetting = "Helcim.PaymentGateway.SecretKey";
+
         private const string _apiAccessToken = "Helcim.PaymentGateway.ApiToken";
         private const string _accountId = "Helcim.PaymentGateway.AccountId";
 
         private const string _apiEndpoint = "Helcim.PaymentGateway.ApiEndpoint";
+        private const string _helcimJsPath = "Helcim.PaymentGateway.HelcimjsPath";
 
         #region Settings        
 
-        private string ApiMode
-        {
-            get
-            {
-                return GetSetting(_paymentMethodModeStoreSetting);
-            }
-        }
+        /// <summary>
+        /// Test or Live
+        /// </summary>
+        private string ApiMode => GetSetting(_paymentMethodModeStoreSetting);
 
-        private string FormAction
-        {
-            get
-            {
-                return GetSetting(_formActionUrlSetting);
-            }
-        }
+        /// <summary>
+        /// Storefront order creation endpoint 
+        /// </summary>
+        private string FormAction => GetSetting(_formActionUrlSetting);
 
-        private string Token
-        {
-            get
-            {
-                return GetSetting(_tokenSetting);
-            }
-        }
-        private string SecretKey
-        {
-            get
-            {
-                return GetSetting(_secretKeySetting);
-            }
-        }
+        private string Token => GetSetting(_tokenSetting);
 
-        private string AccountId
-        {
-            get
-            {
-                return GetSetting(_accountId);
-            }
-        }
+        private string SecretKey => GetSetting(_secretKeySetting);
 
-        private string ApiAccessToken
-        {
-            get
-            {
-                return GetSetting(_apiAccessToken);
-            }
-        }
+        private string AccountId => GetSetting(_accountId);
 
-        private string ApiEndpoint
-        {
-            get
-            {
-                return GetSetting(_apiEndpoint);
-            }
-        }
+        private string ApiAccessToken => GetSetting(_apiAccessToken);
 
-        public bool IsTest
-        {
-            get { return ApiMode.EqualsInvariant("test"); }
-        }
+        private string ApiEndpoint => GetSetting(_apiEndpoint);
+
+        private string HelcimJsPath => GetSetting(_helcimJsPath);
+
+        public string PaymentActionType => GetSetting(_paymentActionType);
+
+        public bool IsTest => ApiMode.EqualsInvariant("test");
 
         #endregion
 
-        public override PaymentMethodType PaymentMethodType
-        {
-            get { return PaymentMethodType.PreparedForm; }
-        }
+        public override PaymentMethodType PaymentMethodType => PaymentMethodType.PreparedForm;
 
-        public override PaymentMethodGroupType PaymentMethodGroupType
-        {
-            get { return PaymentMethodGroupType.Alternative; }
-        }
+        public override PaymentMethodGroupType PaymentMethodGroupType => PaymentMethodGroupType.Alternative;
 
         private readonly IHelcimCheckoutService _checkoutService;
         private readonly Func<string, IHelcimService> _helcimServiceFactory;
@@ -121,14 +85,17 @@ namespace Helcim.PaymentGateway.Web.Managers
                 FormAction = FormAction,
                 Token = Token,
                 SecretKey = SecretKey,
-                PaymentMethodCode = "HelcimCheckout"
+                PaymentMethodCode = Code,
+                HelcimJsPath = HelcimJsPath
             });
 
-            var result = new ProcessPaymentResult();
-            result.IsSuccess = true;
-            result.NewPaymentStatus = context.Payment.PaymentStatus = PaymentStatus.Pending;
-            result.HtmlForm = formContent;
-            result.OuterId = null;
+            var result = new ProcessPaymentResult
+            {
+                IsSuccess = true,
+                NewPaymentStatus = context.Payment.PaymentStatus = PaymentStatus.Pending,
+                HtmlForm = formContent,
+                OuterId = null
+            };
 
             return result;
         }
@@ -140,41 +107,80 @@ namespace Helcim.PaymentGateway.Web.Managers
 
             var response = GetParamValue(context.Parameters, "response");
             var transactionId = GetParamValue(context.Parameters, "transactionId");
-            var cardToken = GetParamValue(context.Parameters, "cardToken");
 
             var transactionSuccess = response.EqualsInvariant("1");
-            if (transactionSuccess)
+            if (!transactionSuccess)
             {
-                //double check transaction 
-                var service = _helcimServiceFactory(ApiEndpoint);
-                var transactionResult = service.GetTransaction(new HelcimRequest
-                {
-                    AccountId = AccountId,
-                    ApiToken = ApiAccessToken,
-                    TransactionId = transactionId
-                });
+                result.ErrorMessage = GetParamValue(context.Parameters, "responseMessage");
+                return result;
+            }
 
-                if (transactionResult != null)
-                {
-                    result.NewPaymentStatus = context.Payment.PaymentStatus = PaymentStatus.Paid;
-                    context.Payment.OuterId = result.OuterId = transactionId;
-                    context.Payment.AuthorizedDate = DateTime.UtcNow;
-                    //context.Payment.CapturedDate = DateTime.UtcNow;
-                    context.Payment.IsApproved = true;
-                    result.IsSuccess = true;
-                }
+            //double check transaction status to be sure it legit came from helcim
+            var service = _helcimServiceFactory(ApiEndpoint);
+            var transactionResult = service.GetTransaction(new HelcimTransactionRequest()
+            {
+                AccountId = AccountId,
+                ApiToken = ApiAccessToken,
+                TransactionId = transactionId
+            });
+
+            if (transactionResult.Response != 1)
+            {
+                result.ErrorMessage = transactionResult.ResponseMessage;
+                return result;
+            }
+
+            if (PaymentActionType == "Sale")
+            {
+                result.NewPaymentStatus = context.Payment.PaymentStatus = PaymentStatus.Paid;
+                context.Payment.CapturedDate = DateTime.UtcNow;
+                context.Payment.IsApproved = true;
             }
             else
             {
-                result.ErrorMessage = GetParamValue(context.Parameters, "error");
+                result.NewPaymentStatus = context.Payment.PaymentStatus = PaymentStatus.Authorized;
             }
+
+            context.Payment.AuthorizedDate = DateTime.UtcNow;
+            context.Payment.OuterId = result.OuterId = transactionId;
+            result.IsSuccess = true;
 
             return result;
         }
 
         public override CaptureProcessPaymentResult CaptureProcessPayment(CaptureProcessPaymentEvaluationContext context)
         {
-            throw new NotImplementedException();
+            if (context == null || context.Payment == null)
+                throw new ArgumentNullException(nameof(context));
+
+            var result = new CaptureProcessPaymentResult();
+
+            if (context.Payment.IsApproved || (context.Payment.PaymentStatus != PaymentStatus.Authorized &&
+                                               context.Payment.PaymentStatus != PaymentStatus.Cancelled))
+            {
+                return result;
+            }
+
+            var paymentService = _helcimServiceFactory(ApiEndpoint);
+            var captureResult = paymentService.CapturePayment(new HelcimTransactionRequest
+            {
+                AccountId = AccountId,
+                ApiToken = ApiAccessToken,
+                TransactionId = context.Payment.OuterId
+            });
+
+            //check response
+            if (captureResult.Response != 1)
+            {
+                result.ErrorMessage = captureResult.ResponseMessage;
+                return result;
+            }
+
+            result.NewPaymentStatus = context.Payment.PaymentStatus = PaymentStatus.Paid;
+            context.Payment.CapturedDate = DateTime.UtcNow;
+            result.IsSuccess = true;
+            context.Payment.IsApproved = true;
+            return result;
         }
 
         public override RefundProcessPaymentResult RefundProcessPayment(RefundProcessPaymentEvaluationContext context)

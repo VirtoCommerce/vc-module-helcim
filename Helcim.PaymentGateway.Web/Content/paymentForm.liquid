@@ -1,61 +1,61 @@
 ﻿<div id="helcimFormContainer">
+    <style>
+        #helcimForm {
+            width: 50%;
+            margin: 0 auto;
+        }
+    </style>
+    
+    <script src="{{helcimJsPath}}"></script>
 
-    <script src="https://secure.myhelcim.com/js/version2.js"></script>
+    <form name="helcimForm" id="helcimForm" action="{{formAction}}?orderId={{orderId}}&code={{paymentMethodCode}}" method="POST" class="input-group">
+        <h1>Complete your payment</h1>
 
-    <!--cart/externalpaymentcallback-->
-    <form name="helcimForm" id="helcimForm" action="{{formAction}}?orderId={{orderId}}&code={{paymentMethodCode}}" method="POST">
+        <div class="form-group">
+            <!--RESULTS-->
+            <div id="helcimResults"></div>
 
-        <!--RESULTS-->
-        <div id="helcimResults"></div>
+            <!--SETTINGS-->
+            <input type="hidden" id="token" value="{{token}}"/>
+            <input type="hidden" id="language" value="en"/>
+            <input type="hidden" id="test" value="{{isTest}}"/>
 
-        <!--SETTINGS-->
-        <input type="hidden" id="token" value="{{token}}"/>
-        <input type="hidden" id="language" value="en"/>
-        <input type="hidden" id="test" value="{{isTest}}"/>
+            <!--CARD-INFORMATION-->
+            <div class="form-group">
+                <label for="cardNumber" class="control-label">Card Number</label>
+                <input type="text" id="cardNumber" name="cardNumber" value="" class="form-control"/>
+                <!--input-group-field-->
+            </div>
 
-        <!--CARD-INFORMATION-->
-        <div>
-            Card Number: <input type="text" id="cardNumber" value=""/>
+            <div class="form-group">
+                <label for="cardExpiryMonth" class="control-label">Expiry Month</label>
+                <input type="text" id="cardExpiryMonth" class="form-control" value=""/>
+            </div>
+
+            <div class="form-group">
+                <label for="cardExpiryYear" class="control-label">Expiry Year</label>
+                <input type="text" id="cardExpiryYear" class="form-control" value=""/>
+            </div>
+
+            <div class="form-group">
+                <label for="cardCVV" class="control-label">CVV</label>
+                <input type="text" id="cardCVV" class="form-control" value=""/>
+            </div>
+
+            <!--OPTIONAL-AVS-->
+            <div class="form-group">
+                <label for="cardHolderName" class="control-label">Card Holder Name</label>
+                <input type="text" id="cardHolderName" class="form-control" value=""/>
+            </div>
+
+            <input type="hidden" id="amount" value="{{amount}}"/>
+            <input type="hidden" id="amountHash" value="{{amountHash}}"/>
+            <input type="hidden" id="orderNumber" value="{{orderNumber}}"/>
+        
+            <!--BUTTON-->
+            <div>
+                <input class="btn btn-primary" type="button" id="buttonProcess" value="Process" onclick="javascript:helcimProcess();"/>
+            </div>
         </div>
-
-        <div>
-            Expiry Month: <input type="text" id="cardExpiryMonth" value=""/>
-        </div>
-        <div>
-
-            Expiry Year: <input type="text" id="cardExpiryYear" value=""/>
-        </div>
-        <div>
-            CVV: <input type="text" id="cardCVV" value=""/>
-        </div>
-
-        <!--OPTIONAL-AVS-->
-        <div>
-            Card Holder Name: <input type="text" id="cardHolderName" value=""/>
-        </div>
-
-        <input type="hidden" id="amount" value="{{amount}}"/>
-        <input type="hidden" id="amountHash" value="{{amountHash}}"/>
-        <input type="hidden" id="orderNumber" value="{{orderNumber}}"/>
-        <input type="hidden" id="paymentMethodCode" value="{{paymentMethodCode}}"/>
-        <input type="hidden" id="orderId" value="{{orderId}}"/>
-
-        <!--BUTTON-->
-        <div>
-            <input type="button" id="buttonProcess" value="Process" onclick="javascript:helcimProcess();"/>
-        </div>
-
     </form>
-
-    <script type="text/javascript">
-        $("#helcimForm").ready(function() {
-            $("#helcimForm").submit(function(e){
-                e.preventDefault(); //prevent submit
-                var self = this;
-                //cut "xml" hidden field because it fails form validation
-                self.submit(); //submit if ajax OK
-            });
-        });
-    </script>
-
 </div>

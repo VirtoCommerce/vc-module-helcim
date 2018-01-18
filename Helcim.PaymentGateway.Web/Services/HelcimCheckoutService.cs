@@ -16,7 +16,7 @@ namespace Helcim.PaymentGateway.Web.Services
         {
             var formContent = GetFormContent();
 
-            var amount = settings.Order.Sum.ToString("F");
+            var amount = settings.Order.Sum.ToCurrencyString();
             var amountHash = (settings.SecretKey + amount).ToSHA256Hash();
 
             Template template = Template.Parse(formContent);
@@ -29,7 +29,8 @@ namespace Helcim.PaymentGateway.Web.Services
                 orderId = settings.Order.Id,
                 paymentMethodCode = settings.PaymentMethodCode,
                 amount,
-                amountHash
+                amountHash,
+                helcimJsPath = settings.HelcimJsPath
             }));
 
             return content;

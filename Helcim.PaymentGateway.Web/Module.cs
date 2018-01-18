@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using Helcim.PaymentGateway.Core.Services;
 using Helcim.PaymentGateway.Web.Managers;
@@ -35,7 +36,7 @@ namespace Helcim.PaymentGateway.Web
                 paymentMethod.Name = "Helcim Payment Gateway";
                 paymentMethod.Description = "Helcim payment gateway integration";
                 paymentMethod.LogoUrl = "https://raw.githubusercontent.com/VirtoCommerce/vc-module-helcim/master/Helcim.PaymentGateway.Web/Content/logo.svg";
-                paymentMethod.Settings = settingsManager.GetModuleSettings("Helcim.PaymentGateway");
+                paymentMethod.Settings = settingsManager.GetModuleSettings("Helcim.PaymentGateway").OrderBy(x=>x.Title).ToArray();
                 return paymentMethod;
             };
 

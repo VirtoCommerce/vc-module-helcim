@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<transactions>
+    <transaction>
+        <id>111222</id>
+        <dateCreated>2018-01-17 02:52:26</dateCreated>
+        <status>APPROVED</status>
+        <user>Helcim System</user>
+        <type>PURCHASE</type>
+        <amount>125.99</amount>
+        <approvalCode>T7E5ST</approvalCode>
+        <avsResponse>X</avsResponse>
+        <cvvResponse>M</cvvResponse>
+        <test>1</test>
+        <acquirerTransactionId></acquirerTransactionId>
+        <responseMessage>APPROVED</responseMessage>
+        <ipAddress>127.0.0.1</ipAddress>
+        <orderNumber>CO180117-00001</orderNumber>
+        <card>
+            <cardType>Visa</cardType>
+            <cardNumber>4242********4242</cardNumber>
+            <cardExpiry>0125</cardExpiry>
+            <cardHolderName>John Smith</cardHolderName>
+            <cardToken>1111</cardToken>
+        </card>
+        <batch>
+            <batchNumber>2</batchNumber>
+            <terminal>Demo Terminal - USD</terminal>
+            <settled>0</settled>
+            <dateOpened>2018-01-15 01:09:43</dateOpened>
+            <dateClosed>0000-00-00 00:00:00</dateClosed>
+        </batch>
+    </transaction>
+</transactions>
