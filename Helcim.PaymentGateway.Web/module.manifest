@@ -13,6 +13,9 @@
         <author>Virto Commerce</author>
         <author>Konstantin Savosteev</author>
     </authors>
+    <owners>
+        <owner>Virto Commerce</owner>
+    </owners>
     <releaseNotes>First version.</releaseNotes>
     <iconUrl>https://raw.githubusercontent.com/VirtoCommerce/vc-module-helcim/master/Helcim.PaymentGateway.Web/Content/logo.svg</iconUrl>
     
