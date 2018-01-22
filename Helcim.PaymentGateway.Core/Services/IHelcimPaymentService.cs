@@ -3,7 +3,7 @@ using Helcim.PaymentGateway.Core.Model.Payment;
 
 namespace Helcim.PaymentGateway.Core.Services
 {
-    public interface IHelcimService
+    public interface IHelcimPaymentService
     {
         HelcimPaymentResponse GetTransaction(HelcimTransactionRequest request);
 

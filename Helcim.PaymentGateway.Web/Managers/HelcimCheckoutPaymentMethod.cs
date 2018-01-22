@@ -57,9 +57,9 @@ namespace Helcim.PaymentGateway.Web.Managers
         public override PaymentMethodGroupType PaymentMethodGroupType => PaymentMethodGroupType.Alternative;
 
         private readonly IHelcimCheckoutService _checkoutService;
-        private readonly Func<string, IHelcimService> _helcimServiceFactory;
+        private readonly Func<string, IHelcimPaymentService> _helcimServiceFactory;
 
-        public HelcimCheckoutPaymentMethod(IHelcimCheckoutService checkoutService, Func<string, IHelcimService> helcimServiceFactory) 
+        public HelcimCheckoutPaymentMethod(IHelcimCheckoutService checkoutService, Func<string, IHelcimPaymentService> helcimServiceFactory) 
             : base("HelcimCheckout")
         {
             _checkoutService = checkoutService;
@@ -123,7 +123,7 @@ namespace Helcim.PaymentGateway.Web.Managers
                 TransactionId = transactionId
             });
 
-            if (transactionResult.Response != 1)
+            if (transactionResult.Error)
             {
                 result.ErrorMessage = transactionResult.ResponseMessage;
                 return result;
@@ -169,7 +169,7 @@ namespace Helcim.PaymentGateway.Web.Managers
             });
 
             //check response
-            if (captureResult.Response != 1)
+            if (captureResult.Error)
             {
                 result.ErrorMessage = captureResult.ResponseMessage;
                 return result;

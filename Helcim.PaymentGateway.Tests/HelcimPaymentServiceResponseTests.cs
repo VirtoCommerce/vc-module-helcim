@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Helcim.PaymentGateway.Tests
 {
-    public class ServiceResponseTests
+    public class HelcimPaymentServiceResponseTests
     {
         [Fact]
         public void GetTransaction_SuccessfulReponse_ResponseRead()

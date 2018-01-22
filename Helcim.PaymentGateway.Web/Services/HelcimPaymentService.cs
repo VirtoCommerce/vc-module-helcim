@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Helcim.PaymentGateway.Core.Model;
 using Helcim.PaymentGateway.Core.Model.Payment;
 using Helcim.PaymentGateway.Core.Services;
@@ -10,17 +7,17 @@ using VirtoCommerce.Platform.Core.Common;
 
 namespace Helcim.PaymentGateway.Web.Services
 {
-    public class HelcimService : IHelcimService
+    public class HelcimPaymentService : IHelcimPaymentService
     {
         private readonly string _apiEndpoint;
-        private readonly HttpClient _httpClient;
+        private readonly IHelcimClient _helcimClient;
 
-        #region Implementation of IHelcimService
+        #region Implementation of IHelcimPaymentService
 
-        public HelcimService(string apiEndpoint, HttpClient client)
+        public HelcimPaymentService(string apiEndpoint, IHelcimClient client)
         {
             _apiEndpoint = apiEndpoint;
-            _httpClient = client;
+            _helcimClient = client;
         }
 
         public HelcimPaymentResponse GetTransaction(HelcimTransactionRequest request)
@@ -30,7 +27,7 @@ namespace Helcim.PaymentGateway.Web.Services
                 var values = request.ToDictionary();
                 values.Add("action", "transactionView");
 
-                var response = MakeCall(values);
+                var response = _helcimClient.MakeRequest(_apiEndpoint, values);
                 if (response.Contains("<message>"))
                 {
                     return response.DeserializeXml<HelcimPaymentResponse>();
@@ -63,7 +60,7 @@ namespace Helcim.PaymentGateway.Web.Services
                 var values = request.ToDictionary();
                 values.Add("transactionType", "capture");
 
-                var response = MakeCall(values);
+                var response = _helcimClient.MakeRequest(_apiEndpoint, values);
                 return response.DeserializeXml<HelcimPaymentResponse>();
             }
             catch (Exception ex)
@@ -79,24 +76,13 @@ namespace Helcim.PaymentGateway.Web.Services
                 var values = request.ToDictionary();
                 values.Add("transactionOtherType", "check");
 
-                var response = MakeCall(values);
+                var response = _helcimClient.MakeRequest(_apiEndpoint, values);
                 return response.DeserializeXml<HelcimPaymentResponse>();
             }
             catch (Exception ex)
             {
                 return new HelcimPaymentResponse {ResponseMessage = ex.Message};
             }
-        }
-
-        private string MakeCall(Dictionary<string, string> values)
-        {
-            var requestContent = new FormUrlEncodedContent(values);
-            var postTask = Task.Run(async () => await _httpClient.PostAsync(_apiEndpoint, requestContent));
-            var responseMessage = postTask.Result;
-
-            var readTask = Task.Run(async () => await responseMessage.Content.ReadAsStringAsync());
-            var resultContent = readTask.Result;
-            return resultContent;
         }
 
         #endregion

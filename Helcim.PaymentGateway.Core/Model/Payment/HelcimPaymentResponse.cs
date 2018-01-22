@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
+using Newtonsoft.Json.Serialization;
 
 namespace Helcim.PaymentGateway.Core.Model.Payment
 {
@@ -9,6 +10,8 @@ namespace Helcim.PaymentGateway.Core.Model.Payment
         {
             Response = 0;
         }
+
+        public bool Error => Response == 0;
 
         [XmlElement("response")]
         public int Response { get; set; }

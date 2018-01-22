@@ -63,7 +63,8 @@
     <Compile Include="Model\Payment\HelcimPaymentTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IHelcimCheckoutService.cs" />
-    <Compile Include="Services\IHelcimService.cs" />
+    <Compile Include="Services\IHelcimClient.cs" />
+    <Compile Include="Services\IHelcimPaymentService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
