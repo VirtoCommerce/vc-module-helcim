@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Specialized;
+using Helcim.PaymentGateway.Core.Helpers;
 using Helcim.PaymentGateway.Core.Model;
 using Helcim.PaymentGateway.Core.Services;
+using VirtoCommerce.Domain.Order.Model;
 using VirtoCommerce.Domain.Payment.Model;
 using VirtoCommerce.Platform.Core.Common;
 
@@ -96,6 +98,7 @@ namespace Helcim.PaymentGateway.Web.Managers
                 HtmlForm = formContent,
                 OuterId = null
             };
+            context.Payment.Status = result.NewPaymentStatus.ToString();
 
             return result;
         }
@@ -107,10 +110,21 @@ namespace Helcim.PaymentGateway.Web.Managers
             var response = GetParamValue(context.Parameters, "response");
             var transactionId = GetParamValue(context.Parameters, "transactionId");
 
+            var transaction = new PaymentGatewayTransaction
+            {
+                ResponseCode = response,
+                ResponseData = GetParamValue(context.Parameters, "xml"),
+                Amount = GetParamValue(context.Parameters, "amount").ToDecimalSafe(),
+                Note = "PostProcessPayment"
+            };
+            context.Payment.Transactions.Add(transaction);
+
             var transactionSuccess = response.EqualsInvariant("1");
             if (!transactionSuccess)
             {
-                result.ErrorMessage = GetParamValue(context.Parameters, "responseMessage");
+                var message = GetParamValue(context.Parameters, "responseMessage");
+                transaction.ProcessError = message;
+                result.ErrorMessage = message;
                 return result;
             }
 
@@ -140,6 +154,8 @@ namespace Helcim.PaymentGateway.Web.Managers
                 result.NewPaymentStatus = context.Payment.PaymentStatus = PaymentStatus.Authorized;
             }
 
+            transaction.IsProcessed = true;
+            context.Payment.Status = result.NewPaymentStatus.ToString();
             context.Payment.AuthorizedDate = DateTime.UtcNow;
             context.Payment.OuterId = result.OuterId = transactionId;
             result.IsSuccess = true;
@@ -153,6 +169,14 @@ namespace Helcim.PaymentGateway.Web.Managers
                 throw new ArgumentNullException(nameof(context));
 
             var result = new CaptureProcessPaymentResult();
+            var transaction = new PaymentGatewayTransaction
+                {
+                    ResponseCode = GetParamValue(context.Parameters, "response"),
+                    ResponseData = GetParamValue(context.Parameters, "xml"),
+                    Amount = GetParamValue(context.Parameters, "amount").ToDecimalSafe(),
+                    Note = "CaptureProcessPayment"
+                };
+            context.Payment.Transactions.Add(transaction);
 
             if (context.Payment.IsApproved || (context.Payment.PaymentStatus != PaymentStatus.Authorized &&
                                                context.Payment.PaymentStatus != PaymentStatus.Cancelled))
@@ -175,7 +199,9 @@ namespace Helcim.PaymentGateway.Web.Managers
                 return result;
             }
 
+            transaction.IsProcessed = true;
             result.NewPaymentStatus = context.Payment.PaymentStatus = PaymentStatus.Paid;
+            context.Payment.Status = result.NewPaymentStatus.ToString();
             context.Payment.CapturedDate = DateTime.UtcNow;
             result.IsSuccess = true;
             context.Payment.IsApproved = true;

@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using VirtoCommerce.Platform.Core.Common;
 
 namespace Helcim.PaymentGateway.Core.Helpers
 {
@@ -22,6 +23,16 @@ namespace Helcim.PaymentGateway.Core.Helpers
         public static string ToCurrencyString(this decimal source)
         {
             return source.ToString("N2");
+        }
+
+        public static decimal ToDecimalSafe(this string source)
+        {
+            var result = default(decimal);
+            if (source.IsNullOrEmpty())
+                return result;
+
+            decimal.TryParse(source, out result);
+            return result;
         }
     }
 }
