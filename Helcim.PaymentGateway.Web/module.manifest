@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <module>
     <id>Helcim.PaymentGateway</id>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <platformVersion>2.13.19</platformVersion>
     <dependencies>
         <dependency id="VirtoCommerce.Core" version="2.24.19" />
@@ -32,7 +32,7 @@
             </setting>
             <setting>
                 <name>Helcim.PaymentGateway.SecretKey</name>
-                <valueType>string</valueType>
+                <valueType>secureString</valueType>
                 <title>Helcim.js Secret Key</title>
                 <description>Secret Key</description>
             </setting>
@@ -44,7 +44,7 @@
             </setting>
             <setting>
                 <name>Helcim.PaymentGateway.ApiToken</name>
-                <valueType>string</valueType>
+                <valueType>secureString</valueType>
                 <title>Helcim API Access Token</title>
                 <description>Backend Access Token</description>
             </setting>
