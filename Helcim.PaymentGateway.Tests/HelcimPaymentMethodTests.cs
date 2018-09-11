@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Helcim.PaymentGateway.Core.Model;
 using Helcim.PaymentGateway.Core.Model.Payment;
 using Helcim.PaymentGateway.Core.Services;
 using Helcim.PaymentGateway.Web.Managers;
-using Helcim.PaymentGateway.Web.Services;
 using Moq;
 using VirtoCommerce.Domain.Order.Model;
 using VirtoCommerce.Domain.Payment.Model;
@@ -63,7 +58,7 @@ namespace Helcim.PaymentGateway.Tests
 
             var context = new PostProcessPaymentEvaluationContext()
             {
-                Payment = new PaymentIn(),
+                Payment = new PaymentIn { Transactions = new List<PaymentGatewayTransaction>() },
                 Parameters = new NameValueCollection()
                 {
                     {"response", "1"},
@@ -100,7 +95,7 @@ namespace Helcim.PaymentGateway.Tests
 
             var context = new PostProcessPaymentEvaluationContext()
             {
-                Payment = new PaymentIn(),
+                Payment = new PaymentIn { Transactions = new List<PaymentGatewayTransaction>() },
                 Parameters = new NameValueCollection()
                 {
                     {"response", "1"},
@@ -138,7 +133,7 @@ namespace Helcim.PaymentGateway.Tests
 
             var context = new PostProcessPaymentEvaluationContext()
             {
-                Payment = new PaymentIn(),
+                Payment = new PaymentIn { Transactions = new List<PaymentGatewayTransaction>() },
                 Parameters = new NameValueCollection()
                 {
                     {"response", "0"},
@@ -168,7 +163,7 @@ namespace Helcim.PaymentGateway.Tests
 
             var context = new PostProcessPaymentEvaluationContext()
             {
-                Payment = new PaymentIn(),
+                Payment = new PaymentIn { Transactions = new List<PaymentGatewayTransaction>() },
                 Parameters = new NameValueCollection()
                 {
                     {"response", "1"}
@@ -201,7 +196,8 @@ namespace Helcim.PaymentGateway.Tests
                 Payment = new PaymentIn()
                 {
                     PaymentStatus = PaymentStatus.Authorized,
-                    OuterId = transactionId
+                    OuterId = transactionId,
+                    Transactions = new List<PaymentGatewayTransaction>()
                 }
             };
             var result = paymentMethod.CaptureProcessPayment(context);
@@ -231,7 +227,8 @@ namespace Helcim.PaymentGateway.Tests
             {
                 Payment = new PaymentIn()
                 {
-                    PaymentStatus = PaymentStatus.Authorized
+                    PaymentStatus = PaymentStatus.Authorized,
+                    Transactions = new List<PaymentGatewayTransaction>()
                 }
             };
             var result = paymentMethod.CaptureProcessPayment(context);
