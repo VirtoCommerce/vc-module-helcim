@@ -30,7 +30,8 @@ namespace Helcim.PaymentGateway.Web.Services
                 paymentMethodCode = settings.PaymentMethodCode,
                 amount,
                 amountHash,
-                helcimJsPath = settings.HelcimJsPath
+                helcimJsPath = settings.HelcimJsPath,
+                today = DateTime.UtcNow
             }));
 
             return content;
